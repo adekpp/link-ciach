@@ -24,8 +24,6 @@ export default function Home() {
     e.preventDefault();
     await createShortUrl(url);
   };
-  console.log("shortenedUrl", shortUrl);
-
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shortUrl);
     toast.success("Skopiowano do schowka");
