@@ -7,14 +7,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 export const Header = () => {
   const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
   useEffect(() => setMounted(true), []);
-  const { theme } = useTheme();
 
   if (!mounted) return null;
   return (
     <header className="px-4 lg:px-6 h-14 flex items-center justify-between">
       <div className="flex items-center justify-center">
-        {theme === "dark" ? (
+        {resolvedTheme === "dark" ? (
           <Link href="/">
             <Image
               src="/logo-dark.svg"

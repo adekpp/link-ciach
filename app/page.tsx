@@ -2,24 +2,32 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { LinkIcon, Scissors, Check, Copy, BarChart } from "lucide-react";
+import {
+  LinkIcon,
+  Scissors,
+  Check,
+  Copy,
+  BarChart,
+  Loader2,
+} from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FeaturesCard } from "@/components/features-card";
 import { createShortUrl } from "./utils";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useCreateShortUrl } from "@/hooks/use-create-short-url";
 export default function Home() {
   const [url, setUrl] = useState("");
-  const [shortenedUrl, setShortenedUrl] = useState<string>("");
+  const { createShortUrl, error, loading, shortUrl } = useCreateShortUrl();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const shortUrl = await createShortUrl(url);
-    setShortenedUrl(shortUrl);
+    await createShortUrl(url);
   };
+  console.log("shortenedUrl", shortUrl);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(shortenedUrl);
+    navigator.clipboard.writeText(shortUrl);
     toast.success("Skopiowano do schowka");
   };
 
@@ -49,13 +57,27 @@ export default function Home() {
                   onChange={(e) => setUrl(e.target.value)}
                   required
                 />
-                <Button type="submit">Skróć</Button>
+                <Button
+                  type="submit"
+                  className="w-[60px] bg-[#121212] dark:bg-white "
+                >
+                  {loading ? (
+                    <Loader2
+                      size={20}
+                      className="animate-spin text-white dark:text-[#121212]"
+                    />
+                  ) : (
+                    "Skróć"
+                  )}
+                </Button>
               </form>
-              {shortenedUrl && (
+              {shortUrl && (
                 <div className="absolute inset-0 top-12">
                   <div className="flex items-center bg-green-900 p-3 rounded-md justify-between">
                     <Check className="text-green-600" />
-                    <p className="font-medium text-[#121212] dark:text-white">{shortenedUrl}</p>
+                    <p className="font-medium text-white dark:text-white">
+                      {shortUrl}
+                    </p>
                     <Button
                       className="bg-white/10 hover:bg-white/20 text-white hover:text-white active:bg-white/10"
                       variant="ghost"
@@ -68,8 +90,11 @@ export default function Home() {
                   </div>
                   <div className="text-base text-[#121212] dark:text-white">
                     <p>Śledź klinięcia w swój link:</p>
-                    <Link href={`${shortenedUrl}/stats`} className="text-blue-500 underline">
-                      {shortenedUrl}/stats
+                    <Link
+                      href={`${shortUrl}/stats`}
+                      className="text-blue-500 underline"
+                    >
+                      {shortUrl}/stats
                     </Link>
                   </div>
                 </div>
