@@ -55,7 +55,7 @@ export default function Home() {
                 <div className="absolute inset-0 top-12">
                   <div className="flex items-center bg-green-900 p-3 rounded-md justify-between">
                     <Check className="text-green-600" />
-                    <p className="font-medium">{shortenedUrl}</p>
+                    <p className="font-medium text-[#121212] dark:text-white">{shortenedUrl}</p>
                     <Button
                       className="bg-white/10 hover:bg-white/20 text-white hover:text-white active:bg-white/10"
                       variant="ghost"

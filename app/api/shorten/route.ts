@@ -6,7 +6,6 @@ import { prisma } from "@/prisma/client";
 export async function POST(req: Request) {
   try {
     const { originalUrl } = await req.json();
-    console.log(originalUrl);
     const baseUrl = process.env.BASE_URL;
     const urlId = nanoid(5);
 
