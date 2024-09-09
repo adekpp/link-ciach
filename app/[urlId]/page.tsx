@@ -1,10 +1,11 @@
+import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/prisma/client";
-import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { urlId: string } }
-) {
+export default async function RedirectPage({
+  params,
+}: {
+  params: { urlId: string };
+}) {
   const { urlId } = params;
 
   try {
@@ -15,7 +16,7 @@ export async function GET(
     });
 
     if (!url) {
-      return NextResponse.json({ error: "Brak linku" }, { status: 404 });
+      notFound();
     }
 
     await prisma.url.update({
@@ -29,9 +30,10 @@ export async function GET(
       },
     });
 
-    return NextResponse.redirect(url.originalUrl);
+
+    redirect(url.originalUrl);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "Wystąpił błąd" }, { status: 500 });
+    console.error("Error in RedirectPage:", error);
+    throw error;
   }
 }
